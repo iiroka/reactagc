@@ -1,0 +1,7 @@
+.left-container {
+    display: grid;
+    grid-template-columns: auto auto;
+    border-width: 10px;
+    border-color: rgb(74, 73, 73);
+    border-style: solid;
+}

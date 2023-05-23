@@ -1,0 +1,42 @@
+.App-header {
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+}
+
+.step-button {
+  padding: 15px 25px;
+}
+
+.step-button:active {
+  transform: translateY(4px);
+}
+
+.stepping-button {
+  padding: 15px 25px;
+}
+
+.stepping-button:active {
+  transform: translateY(4px);
+}
+
+.run-button {
+  padding: 15px 25px;
+}
+
+.run-button:active {
+  transform: translateY(4px);
+}
+
+.stop-button {
+  padding: 15px 25px;
+}
+
+.stop-button:active {
+  transform: translateY(4px);
+}
