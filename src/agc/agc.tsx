@@ -319,9 +319,14 @@ export class Agc {
     private m_scalerCounter = 0;
     private m_generatedWarning = false;
     private m_warningFilter = 0;
+    private m_channelWritten = 0;
 
     getCycleCounter(): number {
         return Number(BigInt.asIntN(32, this.m_cycleCounter));
+    }
+
+    getChannelWritten(): number {
+        return this.m_channelWritten;
     }
 
     constructor() {
@@ -404,6 +409,8 @@ export class Agc {
         }
 
         this.m_cycleCounter++;
+
+        this.m_channelWritten = 0;
 
         //----------------------------------------------------------------------
         // Update the thingy that determines when 1/1600 second has passed.
@@ -1574,6 +1581,7 @@ export class Agc {
             this.m_regs[AgcConsts.REG_Q] = val;
         } else {
             this.m_inputChannel[addr] = val;
+            this.m_channelWritten = addr;
             if (addr !== 7)
                 console.log(`writeIO ${addr.toString(8).padStart(5, '0')} ${val.toString(8).padStart(5, '0')}`)
     

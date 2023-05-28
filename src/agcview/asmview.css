@@ -5,3 +5,11 @@
 .textarea {
     font-family: 'Courier New', Courier, monospace;
 }
+.asmline {
+    font-family: 'Courier New', Courier, monospace;
+    inline-size: 250px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-left: 1px;
+    overflow: hidden;
+}

@@ -3,7 +3,7 @@
     grid-template-columns: repeeat(6 32px);
     grid-template-rows: repeeat(7 auto);
     gap: 0px;
-    border-width: 10px;
+    border-width: 8px;
     border-color: rgb(74, 73, 73);
     border-style: solid;
     width: 192;

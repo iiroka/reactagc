@@ -12,21 +12,24 @@ export default function DSKYRightPanel(props: DskyRightProperties) {
     const [ch11, setCh11] = useState(0)
 
     useEffect(() => {
-        let ch = agc.readIO(0o10);
-        const A =  (ch >> 11) & 0xF;
-        const B =  (ch >> 10) & 1;
-        const C =  (ch >> 5) & 0x1F;
-        const D =  (ch >> 0) & 0x1F;
-        switch (A) {
-            case 0:
-                break;
-            case 12:
-                break;
-            default:
-                console.log(`A ${A} ${B} ${C} ${D}`)
-                break;
-        }
-        setCh11(agc.readIO(0o11));
+        const ch = agc.getChannelWritten();
+        if (ch === 0o10) {
+            let ch = agc.readIO(0o10);
+            const A =  (ch >> 11) & 0xF;
+            const B =  (ch >> 10) & 1;
+            const C =  (ch >> 5) & 0x1F;
+            const D =  (ch >> 0) & 0x1F;
+            switch (A) {
+                case 0:
+                    break;
+                case 12:
+                    break;
+                default:
+                    console.log(`A ${A} ${B} ${C} ${D}`)
+                    break;
+            }
+        } else if (ch === 0o11) 
+            setCh11(agc.readIO(0o11));
         return () => {};
       }, [props.counter, agc]);
 

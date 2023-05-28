@@ -28,8 +28,8 @@ export default function App() {
 
     function doRun() {
         setDebugging(false);
-        let id = setInterval(() => { 
-            while(!agc.step()); 
+        let id = setInterval(() => {
+            while (!agc.step()); 
             setValue(value => value + 1);
         });
         setTimerId(+id);
@@ -75,13 +75,11 @@ export default function App() {
                     </div>
                 )}
                 <div className="spacing" />
-                <div className="monitors">
-                    <div className="dskyview">
-                        <DSKY counter={agc.getCycleCounter()}/>
-                    </div>
-                    <div className="telemtry">
-                        <Telemetry />
-                    </div>
+                <div className="dskyview">
+                    <DSKY counter={agc.getCycleCounter()}/>
+                </div>
+                <div className="telemtry">
+                    <Telemetry counter={agc.getCycleCounter()}/>
                 </div>
             </div>
         </div>

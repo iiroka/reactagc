@@ -106,6 +106,8 @@ button {
     outline: none;
     border-width: 0px;
     padding: 0px;
+    width: 75px;
+    height: 75px;
 }
 
 .button:active {
