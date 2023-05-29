@@ -319,14 +319,11 @@ export class Agc {
     private m_scalerCounter = 0;
     private m_generatedWarning = false;
     private m_warningFilter = 0;
-    private m_channelWritten = 0;
+
+    public io_handler?: (addr: number, value: number) => void = undefined;
 
     getCycleCounter(): number {
         return Number(BigInt.asIntN(32, this.m_cycleCounter));
-    }
-
-    getChannelWritten(): number {
-        return this.m_channelWritten;
     }
 
     constructor() {
@@ -410,8 +407,6 @@ export class Agc {
 
         this.m_cycleCounter++;
 
-        this.m_channelWritten = 0;
-
         //----------------------------------------------------------------------
         // Update the thingy that determines when 1/1600 second has passed.
         // 1/1600 is the basic timing used to drive timer registers.  1/1600
@@ -494,7 +489,7 @@ export class Agc {
                     this.m_interruptRequests[i] = 0;
                     this.m_interruptRequests[0] = i;
     
-                    console.log(`IRQ ${i}`);
+                    // console.log(`IRQ ${i}`);
                     this.writeMem(AgcConsts.REG_Z, 0o4000 + 4 * i);
     
                     interruptRequested = true;
@@ -1565,8 +1560,8 @@ export class Agc {
             return 0;
         if (addr === AgcConsts.REG_L) return this.m_regs[AgcConsts.REG_L];
         if (addr === AgcConsts.REG_Q) return this.m_regs[AgcConsts.REG_Q];
-        if (addr !== 7 && addr !== 0o10 && addr !== 0o11)
-            console.log(`readIO ${addr.toString(8).padStart(5, '0')}`)
+        // if (addr !== 7 && addr !== 0o10 && addr !== 0o11)
+        //     console.log(`readIO ${addr.toString(8).padStart(5, '0')}`)
         return this.m_inputChannel[addr];
     }
     
@@ -1581,10 +1576,10 @@ export class Agc {
             this.m_regs[AgcConsts.REG_Q] = val;
         } else {
             this.m_inputChannel[addr] = val;
-            this.m_channelWritten = addr;
-            if (addr !== 7)
-                console.log(`writeIO ${addr.toString(8).padStart(5, '0')} ${val.toString(8).padStart(5, '0')}`)
+            // if (addr !== 7)
+            //     console.log(`writeIO ${addr.toString(8).padStart(5, '0')} ${val.toString(8).padStart(5, '0')}`)
     
+            if (this.io_handler) this.io_handler(addr, val);
             if (addr === 0o34)
                 this.m_downlink |= 1;
             else if (addr === 0o35)
@@ -1614,11 +1609,11 @@ export class Agc {
         // Check alarms first, since there's a chance we might go to standby
         if (0o4000 === (0o7777 & this.m_inputChannel[AgcConsts.IO_LOSCALAR])) {
             // The Night Watchman begins looking once every 1.28s
-            console.log("NIGHT WATCHMAN");
+            // console.log("NIGHT WATCHMAN");
     
         } else if (0o0000 === (0o7777 & this.m_inputChannel[AgcConsts.IO_LOSCALAR])) {
             // The standby circuit checks the SBY/PRO button state every 1.28s
-            console.log("STANDBY CIRCUIT CHECK");
+            // console.log("STANDBY CIRCUIT CHECK");
      
         } else if (0o0 === (0o7 & this.m_inputChannel[AgcConsts.IO_LOSCALAR])) {
             // Update the warning filter. Once every 160ms, if an input to the filter has been
@@ -1647,13 +1642,13 @@ export class Agc {
         {
             if (0o400 === (0o777 & this.m_inputChannel[AgcConsts.IO_LOSCALAR])) {
                 // The Rupt Lock alarm watches ISR state starting every 160ms
-                console.log("RUPT LOCK ALARM");
+                // console.log("RUPT LOCK ALARM");
             // } else if ((State->RuptLock || State->NoRupt) && 0300 == (0777 & m_inputChannel[AGCConsts::IO_LOSCALAR])) {
             }
     
             if (0o20 === (0o37 & this.m_inputChannel[AgcConsts.IO_LOSCALAR])) {
                 // The TC Trap alarm watches executing instructions every 5ms
-                console.log("TC Trap");
+                // console.log("TC Trap");
             }
     
     

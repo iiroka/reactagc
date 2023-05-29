@@ -1,41 +1,14 @@
-import { useState, useContext, useEffect } from 'react';
-import { AgcContext } from '../AgcContext';
 import './dskyright.css'
 
 interface DskyRightProperties {
-    counter: number
+    ch11bits: number
 }
 
 export default function DSKYRightPanel(props: DskyRightProperties) {
 
-    const agc = useContext(AgcContext);
-    const [ch11, setCh11] = useState(0)
-
-    useEffect(() => {
-        const ch = agc.getChannelWritten();
-        if (ch === 0o10) {
-            let ch = agc.readIO(0o10);
-            const A =  (ch >> 11) & 0xF;
-            const B =  (ch >> 10) & 1;
-            const C =  (ch >> 5) & 0x1F;
-            const D =  (ch >> 0) & 0x1F;
-            switch (A) {
-                case 0:
-                    break;
-                case 12:
-                    break;
-                default:
-                    console.log(`A ${A} ${B} ${C} ${D}`)
-                    break;
-            }
-        } else if (ch === 0o11) 
-            setCh11(agc.readIO(0o11));
-        return () => {};
-      }, [props.counter, agc]);
-
     return (
         <div className="right-container">
-            <img className='comp-acty' src={(ch11 & 0x002) ? "./CompActyOn.jpg" : "./CompActyOff.jpg"} alt="CompActy" />
+            <img className='comp-acty' src={(props.ch11bits & 0x002) ? "./CompActyOn.jpg" : "./CompActyOff.jpg"} alt="CompActy" />
             <img className='prog' src="./rProgOn.jpg" alt="PROG" />
             <img className='md1' src="./7Seg-0.jpg" alt="0" />
             <img className='md2' src="./7Seg-0.jpg" alt="0" />
